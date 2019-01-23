@@ -1,9 +1,9 @@
-import React from "react"
-import { Group } from "@vx/group"
-import { Tree } from "@vx/hierarchy"
-import { LinearGradient } from "@vx/gradient"
-import { hierarchy } from "d3-hierarchy"
-import { pointRadial } from "d3-shape"
+import React from 'react'
+import { Group } from '@vx/group'
+import { Tree } from '@vx/hierarchy'
+import { LinearGradient } from '@vx/gradient'
+import { hierarchy } from 'd3-hierarchy'
+import { pointRadial } from 'd3-shape'
 
 import {
   LinkHorizontal,
@@ -18,91 +18,91 @@ import {
   LinkHorizontalLine,
   LinkVerticalLine,
   LinkRadialLine
-} from "@vx/shape"
+} from '@vx/shape'
 
 const data = {
-  name: "J A",
-  gender: "Female",
+  name: 'J A',
+  gender: 'Female',
   children: [
     {
-      name: "P A",
-      gender: "Female",
+      name: 'P A',
+      gender: 'Female',
       isSource: true,
       children: [
         {
-          name: "MK N A",
-          gender: "Male",
+          name: 'MK N A',
+          gender: 'Male',
           children: [
             {
-              name: "B K",
+              name: 'B K',
               children: [
                 {
-                  name: "D MM",
-                  gender: "Female",
+                  name: 'D MM',
+                  gender: 'Female',
 
                   children: [
-                    { name: "D MM", gender: "Female" },
-                    { name: "B MM" }
+                    { name: 'D MM', gender: 'Female' },
+                    { name: 'B MM' }
                   ]
                 }
               ]
             },
             {
-              name: "V PK",
-              gender: "Female",
+              name: 'V PK',
+              gender: 'Female',
               children: [
                 {
-                  name: "EK T N",
+                  name: 'EK T N',
                   children: [
                     {
-                      name: "S PK",
-                      gender: "Female"
+                      name: 'S PK',
+                      gender: 'Female'
                     },
                     {
-                      name: "Sree PK"
+                      name: 'Sree PK'
                     },
                     {
-                      name: "Sree PK"
+                      name: 'Sree PK'
                     },
                     {
-                      name: "Sree PK"
+                      name: 'Sree PK'
                     }
                   ]
                 }
               ]
             },
             {
-              name: "V K",
+              name: 'V K',
               children: [
                 {
-                  name: "M PG",
-                  gender: "Female",
+                  name: 'M PG',
+                  gender: 'Female',
 
                   children: [
                     {
-                      name: "V K"
+                      name: 'V K'
                     },
                     {
-                      name: "V KV"
+                      name: 'V KV'
                     }
                   ]
                 }
               ]
             },
             {
-              name: "R PK",
+              name: 'R PK',
               children: [
                 {
-                  name: "S VV",
-                  gender: "Female",
+                  name: 'S VV',
+                  gender: 'Female',
 
                   children: [
                     {
-                      name: "A R",
-                      gender: "Female"
+                      name: 'A R',
+                      gender: 'Female'
                     },
                     {
-                      name: "C K"
+                      name: 'C K'
                     }
                   ]
                 }
@@ -117,9 +117,9 @@ const data = {
 
 export default class extends React.Component {
   state = {
-    layout: "cartesian",
-    orientation: "horizontal",
-    linkType: "diagonal",
+    layout: 'cartesian',
+    orientation: 'horizontal',
+    linkType: 'diagonal',
     stepPercent: 1
   }
 
@@ -146,7 +146,7 @@ export default class extends React.Component {
     let sizeWidth
     let sizeHeight
 
-    if (layout === "polar") {
+    if (layout === 'polar') {
       origin = {
         x: innerWidth / 2,
         y: innerHeight / 2
@@ -155,7 +155,7 @@ export default class extends React.Component {
       sizeHeight = Math.min(innerWidth, innerHeight) / 2
     } else {
       origin = { x: 0, y: 0 }
-      if (orientation === "vertical") {
+      if (orientation === 'vertical') {
         sizeWidth = innerWidth
         sizeHeight = innerHeight
       } else {
@@ -166,7 +166,7 @@ export default class extends React.Component {
 
     return (
       <div>
-        <div style={{ color: "rgba(38, 150, 136, 1.000)", fontSize: 10 }}>
+        <div style={{ color: 'rgba(38, 150, 136, 1.000)', fontSize: 10 }}>
           <label>layout:</label>
           <select
             onClick={e => e.stopPropagation()}
@@ -182,7 +182,7 @@ export default class extends React.Component {
             onClick={e => e.stopPropagation()}
             onChange={e => this.setState({ orientation: e.target.value })}
             value={orientation}
-            disabled={layout === "polar"}
+            disabled={layout === 'polar'}
           >
             <option value="vertical">vertical</option>
             <option value="horizontal">horizontal</option>
@@ -209,7 +209,7 @@ export default class extends React.Component {
             step={0.1}
             onChange={e => this.setState({ stepPercent: e.target.value })}
             value={stepPercent}
-            disabled={linkType !== "step" || layout === "polar"}
+            disabled={linkType !== 'step' || layout === 'polar'}
           />
         </div>
 
@@ -228,33 +228,33 @@ export default class extends React.Component {
                   {data.links().map((link, i) => {
                     let LinkComponent
 
-                    if (layout === "polar") {
-                      if (linkType === "step") {
+                    if (layout === 'polar') {
+                      if (linkType === 'step') {
                         LinkComponent = LinkRadialStep
-                      } else if (linkType === "curve") {
+                      } else if (linkType === 'curve') {
                         LinkComponent = LinkRadialCurve
-                      } else if (linkType === "line") {
+                      } else if (linkType === 'line') {
                         LinkComponent = LinkRadialLine
                       } else {
                         LinkComponent = LinkRadial
                       }
                     } else {
-                      if (orientation === "vertical") {
-                        if (linkType === "step") {
+                      if (orientation === 'vertical') {
+                        if (linkType === 'step') {
                           LinkComponent = LinkVerticalStep
-                        } else if (linkType === "curve") {
+                        } else if (linkType === 'curve') {
                           LinkComponent = LinkVerticalCurve
-                        } else if (linkType === "line") {
+                        } else if (linkType === 'line') {
                           LinkComponent = LinkVerticalLine
                         } else {
                           LinkComponent = LinkVertical
                         }
                       } else {
-                        if (linkType === "step") {
+                        if (linkType === 'step') {
                           LinkComponent = LinkHorizontalStep
-                        } else if (linkType === "curve") {
+                        } else if (linkType === 'curve') {
                           LinkComponent = LinkHorizontalCurve
-                        } else if (linkType === "line") {
+                        } else if (linkType === 'line') {
                           LinkComponent = LinkHorizontalLine
                         } else {
                           LinkComponent = LinkHorizontal
@@ -279,8 +279,8 @@ export default class extends React.Component {
 
                   {data.descendants().map((node, key) => {
                     const gender = node.data.gender
-                    const isFemale = gender === "Female" ? true : false
-                    const name = node.data.name
+                    const isFemale = gender === 'Female' ? true : false
+                    const name = node.data.name || ''
                     const nameLength = name.length
                     const nameWords = name.split(/\s+/)
                     const nameWordsLength = nameWords.length
@@ -308,12 +308,12 @@ export default class extends React.Component {
 
                     let top
                     let left
-                    if (layout === "polar") {
+                    if (layout === 'polar') {
                       const [radialX, radialY] = pointRadial(node.x, node.y)
                       top = radialY
                       left = radialX
                     } else {
-                      if (orientation === "vertical") {
+                      if (orientation === 'vertical') {
                         top = node.y
                         left = node.x
                       } else {
@@ -324,11 +324,6 @@ export default class extends React.Component {
 
                     return (
                       <Group top={top} left={left} key={key}>
-                        {console.log(
-                          `${name} - ${node.depth} - isSource: ${
-                            node.data.isSource
-                          }`
-                        )}
                         {node.data.isSource === true && (
                           <circle
                             r={circleRadius}
@@ -348,10 +343,10 @@ export default class extends React.Component {
                             width={width}
                             y={-height / 2}
                             x={-width / 2}
-                            fill={"#272b4d"}
-                            stroke={isFemale ? "#fe6e9e" : "#26deb0"}
+                            fill={'#272b4d'}
+                            stroke={isFemale ? '#fe6e9e' : '#26deb0'}
                             strokeWidth={1}
-                            strokeDasharray={!node.data.children ? "2,2" : "0"}
+                            strokeDasharray={!node.data.children ? '2,2' : '0'}
                             strokeOpacity={!node.data.children ? 0.6 : 1}
                             rx={!node.data.children ? 10 : 0}
                             onClick={() => {
@@ -359,6 +354,7 @@ export default class extends React.Component {
                               console.log(node)
                               this.forceUpdate()
                             }}
+                            className="node"
                           />
                         )}
                         {/* Loop through words in name to make text */}
@@ -366,18 +362,18 @@ export default class extends React.Component {
                           nameWordDyPosition += nameLineHeight
                           return (
                             <text
-                              key={word + "_" + key}
-                              dy={nameWordDyPosition + "em"}
+                              key={word + '_' + key}
+                              dy={nameWordDyPosition + 'em'}
                               fontSize={fontSize}
                               fontFamily="Arial"
-                              textAnchor={"middle"}
-                              style={{ pointerEvents: "none" }}
+                              textAnchor={'middle'}
+                              style={{ pointerEvents: 'none' }}
                               fill={
                                 node.data.isSource === true
-                                  ? "#71248e"
+                                  ? '#71248e'
                                   : node.children
-                                  ? "white"
-                                  : "#26deb0"
+                                  ? 'white'
+                                  : '#26deb0'
                               }
                             >
                               {word}

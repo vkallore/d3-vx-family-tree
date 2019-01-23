@@ -17,3 +17,6 @@ code {
   width: 100%;
   height: 40em;
 }
+rect.node {
+  cursor: pointer;
+}
