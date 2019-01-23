@@ -32,6 +32,7 @@ const data = {
         {
           name: 'MK N A',
           gender: 'Male',
+          spouse: 'Someone',
           children: [
             {
               name: 'B K',
@@ -121,6 +122,18 @@ export default class extends React.Component {
     orientation: 'horizontal',
     linkType: 'diagonal',
     stepPercent: 1
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.showOption = this.showOption.bind(this)
+  }
+
+  showOption(node) {
+    // node.data.isExpanded = !node.data.isExpanded
+    // console.log(node)
+    // this.forceUpdate()
   }
 
   render() {
@@ -221,11 +234,14 @@ export default class extends React.Component {
             <Tree
               root={hierarchy(data, d => (d.isExpanded ? null : d.children))}
               size={[sizeWidth, sizeHeight]}
-              separation={(a, b) => (a.parent === b.parent ? 1 : 0.5) / a.depth}
+              separation={(a, b) =>
+                (a.parent === b.parent ? 0.5 : 0.75) / a.depth
+              }
             >
               {data => (
                 <Group top={origin.y} left={origin.x}>
                   {data.links().map((link, i) => {
+                    console.log(link)
                     let LinkComponent
 
                     if (layout === 'polar') {
@@ -261,7 +277,7 @@ export default class extends React.Component {
                         }
                       }
                     }
-
+                    console.log(link)
                     return (
                       <LinkComponent
                         data={link}
@@ -349,13 +365,50 @@ export default class extends React.Component {
                             strokeDasharray={!node.data.children ? '2,2' : '0'}
                             strokeOpacity={!node.data.children ? 0.6 : 1}
                             rx={!node.data.children ? 10 : 0}
-                            onClick={() => {
-                              node.data.isExpanded = !node.data.isExpanded
-                              console.log(node)
-                              this.forceUpdate()
-                            }}
                             className="node"
+                            onClick={() => {
+                              this.showOption(node)
+                            }}
                           />
+                        )}
+                        {node.data.spouse !== undefined && (
+                          <rect
+                            height={height}
+                            width={width}
+                            y={
+                              orientation !== 'vertical'
+                                ? -height * 2
+                                : -width / 2
+                            }
+                            x={
+                              orientation !== 'vertical'
+                                ? -width / 2
+                                : -height * 2
+                            }
+                            fill={'#fff000'}
+                            stroke={isFemale ? '#fe6e9e' : '#26deb0'}
+                            strokeWidth={1}
+                            strokeDasharray={!node.data.children ? '2,2' : '0'}
+                            strokeOpacity={!node.data.children ? 0.6 : 1}
+                            rx={!node.data.children ? 10 : 0}
+                            className="node"
+                            onClick={() => {
+                              this.showOption(node)
+                            }}
+                          />
+                        )}
+                        {node.data.spouse !== undefined && (
+                          <text
+                            key={node.data.spouse}
+                            dy={'0.33em'}
+                            fontSize={fontSize}
+                            fontFamily="Arial"
+                            textAnchor={'middle'}
+                            style={{ pointerEvents: 'none' }}
+                            fill={'#26deb0'}
+                          >
+                            {node.data.spouse}
+                          </text>
                         )}
                         {/* Loop through words in name to make text */}
                         {nameWords.map((word, key) => {
