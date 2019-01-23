@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@vx/gradient": "0.0.183",
+    "@vx/group": "0.0.183",
+    "@vx/hierarchy": "0.0.183",
+    "@vx/shape": "0.0.183",
+    "d3-hierarchy": "^1.1.8",
+    "d3-shape": "^1.2.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.3"
