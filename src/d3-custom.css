@@ -1,0 +1,32 @@
+body {
+  font: 10px sans-serif;
+  margin: 0px;
+}
+
+.link {
+  fill: none;
+  stroke: #6e80b3;
+}
+
+.spouse {
+  fill: none;
+  stroke: #215bff;
+}
+
+.node.male,
+.node.female {
+  fill: #272b4d;
+}
+.node.male {
+  stroke: #26deb0;
+}
+.node.female {
+  stroke: #fe6e9e;
+}
+.member-name {
+  fill: #fff;
+}
+
+.source-name {
+  fill: #71248e;
+}
