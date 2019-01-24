@@ -40,11 +40,14 @@ const data = {
                 {
                   name: 'D MM',
                   gender: 'Female',
-
-                  children: [
-                    { name: 'D MM', gender: 'Female' },
-                    { name: 'B MM' }
-                  ]
+                  isSpouse: true,
+                  children: [{ name: 'D MM', gender: 'Female' }]
+                },
+                {
+                  name: 'MM D',
+                  gender: 'Female',
+                  isSpouse: true,
+                  children: [{ name: 'B MM' }]
                 }
               ]
             },
@@ -72,6 +75,7 @@ const data = {
                 }
               ]
             },
+
             {
               name: 'V K',
               children: [
@@ -292,7 +296,7 @@ export default class extends React.Component {
                       />
                     )
                   })}
-
+                  {console.log(data.ancestors())}
                   {data.descendants().map((node, key) => {
                     const gender = node.data.gender
                     const isFemale = gender === 'Female' ? true : false
@@ -371,7 +375,7 @@ export default class extends React.Component {
                             }}
                           />
                         )}
-                        {node.data.spouse !== undefined && (
+                        {/* {node.data.spouse !== undefined && (
                           <rect
                             height={height}
                             width={width}
@@ -396,8 +400,8 @@ export default class extends React.Component {
                               this.showOption(node)
                             }}
                           />
-                        )}
-                        {node.data.spouse !== undefined && (
+                        )} */}
+                        {/* {node.data.spouse !== undefined && (
                           <text
                             key={node.data.spouse}
                             dy={'0.33em'}
@@ -409,7 +413,7 @@ export default class extends React.Component {
                           >
                             {node.data.spouse}
                           </text>
-                        )}
+                        )} */}
                         {/* Loop through words in name to make text */}
                         {nameWords.map((word, key) => {
                           nameWordDyPosition += nameLineHeight
