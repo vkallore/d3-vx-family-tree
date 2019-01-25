@@ -15,12 +15,12 @@ var ky = function(d) {
   return d.y - 10
 }
 
-//thie place the text x axis adjust this to center align the text
+// This places the text x axis adjust this to center align the text
 var tx = function(d) {
   return d.x - d.name.length - 10
 }
 
-//thie place the text y axis adjust this to center align the text
+// This places the text y axis adjust this to center align the text
 var ty = function(d) {
   return d.y + 3
 }
@@ -30,7 +30,7 @@ var marginSideWidth = margin.left + margin.right,
   svgWidth = width + marginSideWidth,
   svgHeight = height + 2 * marginSideHeight
 
-//make an SVG
+// Make the SVG
 var svg = d3
   .select('#graph')
   .append('svg')
@@ -42,7 +42,7 @@ var svg = d3
 // Background Gradient
 svg
   .append('rect')
-  .attr('fill', '#272b4d')
+  .attr('id', 'main-bg')
   .attr(
     'transform',
     'translate(-' + 4 * margin.left + ',-' + 4 * margin.top + ')'
@@ -50,9 +50,8 @@ svg
   .attr('width', svgWidth + 2 * marginSideWidth)
   .attr('height', svgHeight + 2 * marginSideHeight)
 
-//My JSON note the
-//no_parent: true this ensures that the node will not be linked to its parent
-//hidden: true ensures that the nodes is not visible.
+// no_parent: true - Ensures that the node will not be linked to its parent
+// hidden: true - Ensures that the nodes is not visible.
 var root = {
   name: 'J A',
   id: 100,
@@ -189,7 +188,7 @@ var root = {
 }
 
 var allNodes = flatten(root)
-//This maps the spouses together mapping uses the ID using the blue line
+// This maps the spouses together mapping uses the ID
 var spouses = [
   {
     source: {
@@ -257,14 +256,12 @@ var rootUserGradient = svgDefs.append('linearGradient').attr('id', 'lgRootUser')
 // a class to style the stop using CSS.
 rootUserGradient
   .append('stop')
-  // .attr('class', 'stop-left')
-  .attr('stop-color', '#fd9b93')
+  .attr('class', 'stop-left')
   .attr('offset', '0')
 
 rootUserGradient
   .append('stop')
-  // .attr('class', 'stop-right')
-  .attr('stop-color', '#fe6e9e')
+  .attr('class', 'stop-right')
   .attr('offset', '1')
 
 // Create the link lines.
@@ -281,7 +278,7 @@ var nodes = svg
   .data(nodes)
   .enter()
 
-//First draw spouse line with blue line
+// Draw spouse line with 'spouse' class
 svg
   .selectAll('.spouse')
   .data(spouses)
@@ -294,7 +291,6 @@ svg
 nodes
   .append('rect')
   .attr('class', function(d) {
-    console.log(d)
     return d.is_root_user !== true
       ? 'node ' + (d.gender === 'Female' ? 'female' : 'male')
       : ''
@@ -316,6 +312,7 @@ nodes
   })
   .attr('x', kx)
   .attr('y', ky)
+
 // Create the node text label.
 nodes
   .append('text')
@@ -329,10 +326,10 @@ nodes
   .attr('y', ty)
 
 /**
-This defines teh line between spouses.
-**/
+ * Defines the line between spouses.
+ **/
 function spouseLine(d, i) {
-  //start point
+  // Start point
   var start = allNodes.filter(function(v) {
     if (d.source.id == v.id) {
       return true
@@ -340,7 +337,7 @@ function spouseLine(d, i) {
       return false
     }
   })
-  //end point
+  // End point
   var end = allNodes.filter(function(v) {
     if (d.target.id == v.id) {
       return true
@@ -348,7 +345,7 @@ function spouseLine(d, i) {
       return false
     }
   })
-  //define teh start coordinate and end co-ordinate
+  // Define the start coordinate and end coordinate
   var linedata = [
     {
       x: start[0].x,
@@ -371,8 +368,10 @@ function spouseLine(d, i) {
   return fun(linedata)
 }
 
-/*To make the nodes in flat mode.
-This gets all teh nodes in same level*/
+/**
+ * To make the nodes in flat mode.
+ * This gets all the nodes in same level
+ */
 function flatten(root) {
   var n = [],
     i = 0
@@ -385,16 +384,17 @@ function flatten(root) {
   recurse(root)
   return n
 }
-/** 
-This draws the lines between nodes.
-**/
+
+/**
+ * This draws the lines between nodes.
+ **/
 function elbow(d, i) {
   if (d.target.no_parent) {
     return 'M0,0L0,0'
   }
   var diff = d.source.y - d.target.y
-  //0.40 defines the point from where you need the line to break out change is as per your choice.
-  var ny = d.target.y + diff * 0.4
+  // Defines the point from where you need the line to break out change
+  var ny = d.target.y + diff * 0.5
 
   linedata = [
     {

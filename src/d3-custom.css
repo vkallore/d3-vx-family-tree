@@ -3,6 +3,9 @@ body {
   margin: 0px;
 }
 
+#main-bg {
+  fill: #272b4d;
+}
 .link {
   fill: none;
   stroke: #6e80b3;
@@ -29,4 +32,11 @@ body {
 
 .source-name {
   fill: #71248e;
+}
+
+.stop-left {
+  stop-color: #fd9b93;
+}
+.stop-right {
+  stop-color: #fe6e9e;
 }
