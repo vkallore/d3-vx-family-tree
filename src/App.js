@@ -32,7 +32,7 @@ const data = {
         {
           name: 'MK N A',
           gender: 'Male',
-          spouse: 'Someone',
+          isSpouse: true,
           children: [
             {
               name: 'B K',
@@ -40,7 +40,6 @@ const data = {
                 {
                   name: 'D MM',
                   gender: 'Female',
-                  isSpouse: true,
                   children: [{ name: 'D MM', gender: 'Female' }]
                 },
                 {
@@ -231,8 +230,12 @@ export default class extends React.Component {
         </div>
 
         <svg width={width} height={height}>
+          {/* LinearGradient - lgFemale - Pink gradient */}
           <LinearGradient id="lgFemale" from="#fd9b93" to="#fe6e9e" />
+          {/* LinearGradient - lgMale - Green gradient */}
           <LinearGradient id="lgMale" from="#13ea58" to="#059a35" />
+          {/* LinearGradient - lgSpouse - Yellow gradient */}
+          <LinearGradient id="lgSpouse" from="#f3f3a7" to="#ffff00" />
           <rect width={width} height={height} rx={0} fill="#272b4d" />
           <Group top={margin.top} left={margin.left}>
             <Tree
@@ -245,7 +248,6 @@ export default class extends React.Component {
               {data => (
                 <Group top={origin.y} left={origin.x}>
                   {data.links().map((link, i) => {
-                    console.log(link)
                     let LinkComponent
 
                     if (layout === 'polar') {
@@ -281,7 +283,7 @@ export default class extends React.Component {
                         }
                       }
                     }
-                    console.log(link)
+
                     return (
                       <LinkComponent
                         data={link}
@@ -296,7 +298,6 @@ export default class extends React.Component {
                       />
                     )
                   })}
-                  {console.log(data.ancestors())}
                   {data.descendants().map((node, key) => {
                     const gender = node.data.gender
                     const isFemale = gender === 'Female' ? true : false
@@ -363,7 +364,11 @@ export default class extends React.Component {
                             width={width}
                             y={-height / 2}
                             x={-width / 2}
-                            fill={'#272b4d'}
+                            fill={
+                              node.data.isSpouse !== true
+                                ? '#272b4d'
+                                : "url('#lgSpouse')"
+                            }
                             stroke={isFemale ? '#fe6e9e' : '#26deb0'}
                             strokeWidth={1}
                             strokeDasharray={!node.data.children ? '2,2' : '0'}
@@ -428,9 +433,11 @@ export default class extends React.Component {
                               fill={
                                 node.data.isSource === true
                                   ? '#71248e'
-                                  : node.children
-                                  ? 'white'
-                                  : '#26deb0'
+                                  : node.data.isSpouse !== true
+                                  ? node.children
+                                    ? 'white'
+                                    : '#26deb0'
+                                  : '#000'
                               }
                             >
                               {word}
