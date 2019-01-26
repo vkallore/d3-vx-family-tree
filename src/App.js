@@ -26,93 +26,129 @@ const data = {
   children: [
     {
       name: 'P A',
+      id: 1,
       gender: 'Female',
       isSource: true,
+      hasParnter: true
+    },
+    {
+      name: 'MK N A',
+      id: 2,
+      partnerId: 1,
+      gender: 'Male',
+      isPartner: true,
+      noParent: true,
       children: [
         {
-          name: 'MK N A',
-          gender: 'Male',
-          isSpouse: true,
+          name: 'B K',
+          id: 100,
+          hasParnter: true
+        },
+        {
+          name: 'D MM',
+          id: 102,
+          partnerId: 100,
+          gender: 'Female',
+          isPartner: true,
+          noParent: true,
+          children: [{ name: 'D MM', gender: 'Female' }]
+        },
+        {
+          name: 'MM D',
+          id: 102,
+          partnerId: 100,
+          gender: 'Female',
+          isPartner: true,
+          noParent: true,
+          children: [{ name: 'B MM' }]
+        },
+        {
+          name: 'V PK',
+          id: 200,
+          gender: 'Female',
+          hasParnter: true
+        },
+        {
+          name: 'EK T N',
+          id: 201,
+          partnerId: 200,
+          isPartner: true,
+          noParent: true,
           children: [
             {
-              name: 'B K',
-              children: [
-                {
-                  name: 'D MM',
-                  gender: 'Female',
-                  children: [{ name: 'D MM', gender: 'Female' }]
-                },
-                {
-                  name: 'MM D',
-                  gender: 'Female',
-                  isSpouse: true,
-                  children: [{ name: 'B MM' }]
-                }
-              ]
+              name: 'S PK',
+              gender: 'Female'
             },
             {
-              name: 'V PK',
-              gender: 'Female',
-              children: [
-                {
-                  name: 'EK T N',
-                  children: [
-                    {
-                      name: 'S PK',
-                      gender: 'Female'
-                    },
-                    {
-                      name: 'Sree PK'
-                    },
-                    {
-                      name: 'Sree PK'
-                    },
-                    {
-                      name: 'Sree PK'
-                    }
-                  ]
-                }
-              ]
-            },
-
-            {
-              name: 'V K',
-              children: [
-                {
-                  name: 'M PG',
-                  gender: 'Female',
-
-                  children: [
-                    {
-                      name: 'V K'
-                    },
-                    {
-                      name: 'V KV'
-                    }
-                  ]
-                }
-              ]
+              name: 'Sku PK'
             },
             {
-              name: 'R PK',
-              children: [
-                {
-                  name: 'S VV',
-                  gender: 'Female',
-
-                  children: [
-                    {
-                      name: 'A R',
-                      gender: 'Female'
-                    },
-                    {
-                      name: 'C K'
-                    }
-                  ]
-                }
-              ]
+              name: 'Sj PK'
+            },
+            {
+              name: 'Ska PK'
             }
           ]
+        },
+
+        {
+          name: 'V K',
+          id: 300,
+          hasParnter: true
+        },
+        {
+          name: 'M PG',
+          gender: 'Female',
+          id: 301,
+          partnerId: 300,
+          isPartner: true,
+          noParent: true,
+          children: [
+            {
+              name: 'V K'
+            },
+            {
+              name: 'V KV'
+            }
+          ]
+        },
+        {
+          name: 'R PK',
+          id: 400,
+          hasParnter: true
+        },
+        {
+          name: 'S VV',
+          gender: 'Female',
+          id: 401,
+          partnerId: 400,
+          isPartner: true,
+          noParent: true,
+          children: [
+            {
+              name: 'A R',
+              gender: 'Female'
+            },
+            {
+              name: 'C K'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Dummy',
+      id: 3,
+      partnerId: 1,
+      gender: 'Male',
+      isPartner: true,
+      noParent: true,
+      children: [
+        {
+          name: 'Sam'
+        },
+        {
+          name: 'Thomas'
         }
       ]
     }
@@ -150,6 +186,7 @@ export default class extends React.Component {
         bottom: 30
       }
     } = this.props
+    let partners = []
     const nameLineHeight = 1.2
     const fontSize = 9
 
@@ -177,6 +214,42 @@ export default class extends React.Component {
       } else {
         sizeWidth = innerHeight
         sizeHeight = innerWidth
+      }
+    }
+
+    let LinkComponent
+
+    if (layout === 'polar') {
+      if (linkType === 'step') {
+        LinkComponent = LinkRadialStep
+      } else if (linkType === 'curve') {
+        LinkComponent = LinkRadialCurve
+      } else if (linkType === 'line') {
+        LinkComponent = LinkRadialLine
+      } else {
+        LinkComponent = LinkRadial
+      }
+    } else {
+      if (orientation === 'vertical') {
+        if (linkType === 'step') {
+          LinkComponent = LinkVerticalStep
+        } else if (linkType === 'curve') {
+          LinkComponent = LinkVerticalCurve
+        } else if (linkType === 'line') {
+          LinkComponent = LinkVerticalLine
+        } else {
+          LinkComponent = LinkVertical
+        }
+      } else {
+        if (linkType === 'step') {
+          LinkComponent = LinkHorizontalStep
+        } else if (linkType === 'curve') {
+          LinkComponent = LinkHorizontalCurve
+        } else if (linkType === 'line') {
+          LinkComponent = LinkHorizontalLine
+        } else {
+          LinkComponent = LinkHorizontal
+        }
       }
     }
 
@@ -248,40 +321,11 @@ export default class extends React.Component {
               {data => (
                 <Group top={origin.y} left={origin.x}>
                   {data.links().map((link, i) => {
-                    let LinkComponent
-
-                    if (layout === 'polar') {
-                      if (linkType === 'step') {
-                        LinkComponent = LinkRadialStep
-                      } else if (linkType === 'curve') {
-                        LinkComponent = LinkRadialCurve
-                      } else if (linkType === 'line') {
-                        LinkComponent = LinkRadialLine
-                      } else {
-                        LinkComponent = LinkRadial
-                      }
-                    } else {
-                      if (orientation === 'vertical') {
-                        if (linkType === 'step') {
-                          LinkComponent = LinkVerticalStep
-                        } else if (linkType === 'curve') {
-                          LinkComponent = LinkVerticalCurve
-                        } else if (linkType === 'line') {
-                          LinkComponent = LinkVerticalLine
-                        } else {
-                          LinkComponent = LinkVertical
-                        }
-                      } else {
-                        if (linkType === 'step') {
-                          LinkComponent = LinkHorizontalStep
-                        } else if (linkType === 'curve') {
-                          LinkComponent = LinkHorizontalCurve
-                        } else if (linkType === 'line') {
-                          LinkComponent = LinkHorizontalLine
-                        } else {
-                          LinkComponent = LinkHorizontal
-                        }
-                      }
+                    if (link.target.data.hasParnter) {
+                      partners.push(link.target)
+                    }
+                    if (link.target.data.noParent === true) {
+                      return null
                     }
 
                     return (
@@ -298,6 +342,34 @@ export default class extends React.Component {
                       />
                     )
                   })}
+                  {/* Draw Partners Line */}
+                  {data.links().map((link, i) => {
+                    if (link.target.data.isPartner !== true) {
+                      return null
+                    }
+                    const nodePartnerId = link.target.data.partnerId
+
+                    const linkSource = partners.filter(partner => {
+                      return partner.data.id === nodePartnerId ? partner : null
+                    })
+
+                    link.source = linkSource[0]
+
+                    return link.source !== undefined ? (
+                      <LinkComponent
+                        data={link}
+                        percent={+stepPercent}
+                        stroke="#374469"
+                        strokeWidth="1"
+                        fill="none"
+                        key={i}
+                        onClick={data => event => {
+                          console.log(data)
+                        }}
+                      />
+                    ) : null
+                  })}
+
                   {data.descendants().map((node, key) => {
                     const gender = node.data.gender
                     const isFemale = gender === 'Female' ? true : false
@@ -365,15 +437,27 @@ export default class extends React.Component {
                             y={-height / 2}
                             x={-width / 2}
                             fill={
-                              node.data.isSpouse !== true
+                              node.data.isPartner !== true
                                 ? '#272b4d'
                                 : "url('#lgSpouse')"
                             }
                             stroke={isFemale ? '#fe6e9e' : '#26deb0'}
                             strokeWidth={1}
-                            strokeDasharray={!node.data.children ? '2,2' : '0'}
-                            strokeOpacity={!node.data.children ? 0.6 : 1}
-                            rx={!node.data.children ? 10 : 0}
+                            strokeDasharray={
+                              !node.data.children && !node.data.hasParnter
+                                ? '2,2'
+                                : '0'
+                            }
+                            strokeOpacity={
+                              !node.data.children && !node.data.hasParnter
+                                ? 0.6
+                                : 1
+                            }
+                            rx={
+                              !node.data.children && !node.data.hasParnter
+                                ? 10
+                                : 0
+                            }
                             className="node"
                             onClick={() => {
                               this.showOption(node)
@@ -433,7 +517,7 @@ export default class extends React.Component {
                               fill={
                                 node.data.isSource === true
                                   ? '#71248e'
-                                  : node.data.isSpouse !== true
+                                  : node.data.isPartner !== true
                                   ? node.children
                                     ? 'white'
                                     : '#26deb0'
