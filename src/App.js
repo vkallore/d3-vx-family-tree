@@ -21,139 +21,146 @@ import {
 } from '@vx/shape'
 
 const data = {
-  name: 'J A',
-  gender: 'Female',
-  imageUrl: '/avatar/gravator.jpg',
+  name: '',
   children: [
     {
-      name: 'Parvathi Amma',
+      name: 'J A',
       id: 1,
       gender: 'Female',
-      isSource: true,
-      hasParnter: true
+      hasParnter: true,
+      imageUrl: '/avatar/gravator.jpg'
     },
     {
-      name: 'MK N A',
+      name: 'Mr. J A',
       id: 2,
       partnerId: 1,
-      gender: 'Male',
-      isPartner: true,
       noParent: true,
       children: [
         {
-          name: 'Balagopalan K',
-          id: 100,
+          name: 'Parvathi Amma',
+          id: 3,
+          gender: 'Female',
+          isSource: true,
           hasParnter: true
         },
         {
-          name: 'Devi MM',
-          id: 102,
-          partnerId: 100,
-          gender: 'Female',
-          isPartner: true,
-          noParent: true,
-          children: [{ name: 'D MM', gender: 'Female' }]
-        },
-        {
-          name: 'MM D',
-          id: 102,
-          partnerId: 100,
-          gender: 'Female',
-          isPartner: true,
-          noParent: true,
-          children: [{ name: 'B MM' }]
-        },
-        {
-          name: 'V PK',
-          id: 200,
-          gender: 'Female',
-          hasParnter: true,
-          imageUrl: '/avatar/v-pk.jpeg'
-        },
-        {
-          name: 'EK T N',
-          id: 201,
-          partnerId: 200,
-          isPartner: true,
+          name: 'MK N A',
+          id: 5,
+          partnerId: 3,
+          gender: 'Male',
           noParent: true,
           children: [
             {
-              name: 'S PK',
-              gender: 'Female'
+              name: 'Balagopalan K',
+              id: 100,
+              hasParnter: true
             },
             {
-              name: 'Sku PK'
+              name: 'Devi MM',
+              id: 102,
+              partnerId: 100,
+              gender: 'Female',
+              noParent: true,
+              children: [{ name: 'D MM', gender: 'Female' }]
             },
             {
-              name: 'Sj PK'
+              name: 'MM D',
+              id: 102,
+              partnerId: 100,
+              gender: 'Female',
+              noParent: true,
+              children: [{ name: 'B MM' }]
             },
             {
-              name: 'Ska PK'
+              name: 'V PK',
+              id: 200,
+              gender: 'Female',
+              hasParnter: true,
+              imageUrl: '/avatar/v-pk.jpeg'
+            },
+            {
+              name: 'EK T N',
+              id: 201,
+              partnerId: 200,
+              noParent: true,
+              children: [
+                {
+                  name: 'S PK',
+                  gender: 'Female'
+                },
+                {
+                  name: 'Sku PK'
+                },
+                {
+                  name: 'Sj PK'
+                },
+                {
+                  name: 'Ska PK'
+                }
+              ]
+            },
+
+            {
+              name: 'V K',
+              id: 300,
+              hasParnter: true,
+              imageUrl: '/avatar/v-k.jpeg'
+            },
+            {
+              name: 'M PG',
+              gender: 'Female',
+              id: 301,
+              partnerId: 300,
+              noParent: true,
+              children: [
+                {
+                  name: 'V K',
+                  imageUrl: '/avatar/v-k-1.jpeg'
+                },
+                {
+                  name: 'V KV'
+                }
+              ]
+            },
+            {
+              name: 'R PK',
+              id: 400,
+              hasParnter: true
+            },
+            {
+              name: 'S VV',
+              gender: 'Female',
+              id: 401,
+              partnerId: 400,
+              noParent: true,
+              children: [
+                {
+                  name: 'A R',
+                  gender: 'Female'
+                },
+                {
+                  name: 'C K'
+                }
+              ]
             }
           ]
         },
 
         {
-          name: 'V K',
-          id: 300,
-          hasParnter: true,
-          imageUrl: '/avatar/v-k.jpeg'
-        },
-        {
-          name: 'M PG',
-          gender: 'Female',
-          id: 301,
-          partnerId: 300,
-          isPartner: true,
+          name: 'Dummy',
+          id: 4,
+          partnerId: 3,
+          gender: 'Male',
           noParent: true,
+          imageUrl: '/avatar/dummy.png',
           children: [
             {
-              name: 'V K',
-              imageUrl: '/avatar/v-k-1.jpeg'
+              name: 'Sam'
             },
             {
-              name: 'V KV'
+              name: 'Thomas'
             }
           ]
-        },
-        {
-          name: 'R PK',
-          id: 400,
-          hasParnter: true
-        },
-        {
-          name: 'S VV',
-          gender: 'Female',
-          id: 401,
-          partnerId: 400,
-          isPartner: true,
-          noParent: true,
-          children: [
-            {
-              name: 'A R',
-              gender: 'Female'
-            },
-            {
-              name: 'C K'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Dummy',
-      id: 3,
-      partnerId: 1,
-      gender: 'Male',
-      isPartner: true,
-      noParent: true,
-      imageUrl: '/avatar/dummy.png',
-      children: [
-        {
-          name: 'Sam'
-        },
-        {
-          name: 'Thomas'
         }
       ]
     }
@@ -219,9 +226,13 @@ export default class extends React.Component {
       if (orientation === 'vertical') {
         sizeWidth = innerWidth
         sizeHeight = innerHeight
+        /* As root note is hidden, adjust tree's Y positioning */
+        origin.y -= sizeHeight / 10
       } else {
         sizeWidth = innerHeight
         sizeHeight = innerWidth
+        /* As root note is hidden, adjust tree's X positioning */
+        origin.x -= sizeHeight / 10
       }
     }
 
@@ -332,6 +343,10 @@ export default class extends React.Component {
                     if (link.target.data.hasParnter) {
                       partners.push(link.target)
                     }
+                    /* Do not show the link from root empty object */
+                    if (link.source.depth === 0) {
+                      return null
+                    }
                     if (link.target.data.noParent === true) {
                       return null
                     }
@@ -352,7 +367,7 @@ export default class extends React.Component {
                   })}
                   {/* Draw Partners Line */}
                   {data.links().map((link, i) => {
-                    if (link.target.data.isPartner !== true) {
+                    if (typeof link.target.data.partnerId !== 'number') {
                       return null
                     }
                     const nodePartnerId = link.target.data.partnerId
@@ -379,33 +394,14 @@ export default class extends React.Component {
                   })}
 
                   {data.descendants().map((node, key) => {
+                    /* Do not show the empty root object */
+                    if (node.depth === 0) {
+                      return null
+                    }
                     const gender = node.data.gender
                     const isFemale = gender === 'Female' ? true : false
                     const name = node.data.name || ''
                     const nameLength = name.length * 4
-                    // const nameWords = name.split(/\s+/)
-                    // const nameWordsLength = nameWords.length
-                    // let nameWordMaxLength = 0
-                    // nameWords.map(word => {
-                    //   nameWordMaxLength =
-                    //     word.length > nameWordMaxLength
-                    //       ? word.length
-                    //       : nameWordMaxLength
-                    //   return []
-                    // })
-                    // const width =
-                    //   nameWordMaxLength <= 5 ? 40 : nameWordMaxLength * 7
-                    // const height = nameWordsLength * 14
-
-                    /* Name Positioning */
-                    // const nameMidDyPosition =
-                    //   (fontSize / 20) * (nameWordsLength === 2 ? -1 : 1)
-                    // let nameWordDyPosition =
-                    //   nameMidDyPosition -
-                    //   Math.ceil(nameWordsLength / 2) * nameLineHeight
-                    /* EO Name Positioning */
-
-                    // const circleRadius = nameLength <= 5 ? 12 : nameLength * 2
 
                     let top
                     let left
@@ -465,11 +461,6 @@ export default class extends React.Component {
                               ? '#272b4d'
                               : "url('#lgSpouse')"
                           }
-                          // onClick={() => {
-                          //   node.data.isExpanded = !node.data.isExpanded
-                          //   console.log(node)
-                          //   this.forceUpdate()
-                          // }}
                           className={
                             !isSource
                               ? 'node ' + (isFemale ? 'female' : 'male')
@@ -499,69 +490,9 @@ export default class extends React.Component {
                           textAnchor={'middle'}
                           style={{ pointerEvents: 'none' }}
                           className="node"
-                          // strokeOpacity={0.5}
                         >
                           {name}
                         </text>
-                        {/* {node.data.isSource !== true && (
-                          <rect
-                            height={height}
-                            width={width}
-                            y={-height / 2}
-                            x={-width / 2}
-                            fill={
-                              node.data.isPartner !== true
-                                ? '#272b4d'
-                                : "url('#lgSpouse')"
-                            }
-                            stroke={isFemale ? '#fe6e9e' : '#26deb0'}
-                            strokeWidth={1}
-                            strokeDasharray={
-                              !node.data.children && !node.data.hasParnter
-                                ? '2,2'
-                                : '0'
-                            }
-                            strokeOpacity={
-                              !node.data.children && !node.data.hasParnter
-                                ? 0.6
-                                : 1
-                            }
-                            rx={
-                              !node.data.children && !node.data.hasParnter
-                                ? 10
-                                : 0
-                            }
-                            className="node"
-                            onClick={() => {
-                              this.showOption(node)
-                            }}
-                          />
-                        )} */}
-                        {/* Loop through words in name to make text */}
-                        {/* {nameWords.map((word, key) => {
-                          nameWordDyPosition += nameLineHeight
-                          return (
-                            <text
-                              key={word + '_' + key}
-                              dy={nameWordDyPosition + 'em'}
-                              fontSize={fontSize}
-                              fontFamily="Arial"
-                              textAnchor={'middle'}
-                              style={{ pointerEvents: 'none' }}
-                              fill={
-                                node.data.isSource === true
-                                  ? '#71248e'
-                                  : node.data.isPartner !== true
-                                  ? node.children
-                                    ? 'white'
-                                    : '#26deb0'
-                                  : '#000'
-                              }
-                            >
-                              {word}
-                            </text>
-                          )
-                        })} */}
                       </Group>
                     )
                   })}
