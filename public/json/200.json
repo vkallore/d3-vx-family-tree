@@ -1,0 +1,49 @@
+{
+  "name": "",
+  "children": [
+    {
+      "name": "Parvathi Amma",
+      "id": 3,
+      "gender": "Female",
+      "hasParnter": true
+    },
+    {
+      "name": "MK N A",
+      "id": 5,
+      "partnerId": 3,
+      "gender": "Male",
+      "noParent": true,
+      "children": [
+        {
+          "name": "V PK",
+          "id": 200,
+          "isSource": true,
+          "gender": "Female",
+          "hasParnter": true,
+          "imageUrl": "/avatar/v-pk.jpeg"
+        },
+        {
+          "name": "EK T N",
+          "id": 201,
+          "partnerId": 200,
+          "noParent": true,
+          "children": [
+            {
+              "name": "S PK",
+              "gender": "Female"
+            },
+            {
+              "name": "Sku PK"
+            },
+            {
+              "name": "Sj PK"
+            },
+            {
+              "name": "Ska PK"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

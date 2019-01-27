@@ -1,0 +1,40 @@
+{
+  "name": "",
+  "children": [
+    {
+      "name": "V K",
+      "id": 300,
+      "hasParnter": true,
+      "imageUrl": "/avatar/v-k.jpeg"
+    },
+    {
+      "name": "M PG",
+      "gender": "Female",
+      "id": 301,
+      "partnerId": 300,
+      "noParent": true,
+      "children": [
+        {
+          "name": "V K",
+          "id": 3001,
+          "isSource": true,
+
+          "hasParnter": true,
+          "imageUrl": "/avatar/v-k-1.jpeg"
+        },
+        {
+          "name": "D C",
+          "gender": "Female",
+          "id": 3002,
+          "partnerId": 3001,
+          "noParent": true,
+          "children": [
+            {
+              "name": "P V"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

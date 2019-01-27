@@ -115,6 +115,7 @@ const data = {
               children: [
                 {
                   name: 'V K',
+                  id: 3001,
                   imageUrl: '/avatar/v-k-1.jpeg'
                 },
                 {
@@ -172,19 +173,58 @@ export default class extends React.Component {
     layout: 'cartesian',
     orientation: 'horizontal',
     linkType: 'diagonal',
-    stepPercent: 1
+    stepPercent: 1,
+    showOptions: false,
+    nodeId: null,
+    nodeName: '',
+    nodeImageUrl: '',
+    treeData: {}
   }
 
   constructor(props) {
     super(props)
 
-    this.showOption = this.showOption.bind(this)
+    this.showNodeOptions = this.showNodeOptions.bind(this)
+    this.updateTree = this.updateTree.bind(this)
+    this.fetchNodeTree = this.fetchNodeTree.bind(this)
   }
 
-  showOption(node) {
-    // node.data.isExpanded = !node.data.isExpanded
-    // console.log(node)
-    // this.forceUpdate()
+  componentDidMount() {
+    this.setState({ treeData: data })
+  }
+
+  showNodeOptions(node) {
+    const { showOptions } = this.state
+    const imageUrl = node.data && node.data.imageUrl ? node.data.imageUrl : ''
+    const name = node.data && node.data.name ? node.data.name : ''
+    const nodeId = node.data && node.data.id ? node.data.id : ''
+    this.setState({
+      showOptions: !showOptions,
+      nodeImageUrl: imageUrl,
+      nodeName: name,
+      nodeId: nodeId
+    })
+  }
+
+  fetchNodeTree() {
+    const { nodeId, showOptions } = this.state
+    fetch(`/json/${nodeId}.json`)
+      .then(res => {
+        return res.status === 200 ? res.json() : {}
+      })
+      .then(treeData => {
+        this.setState({ treeData: treeData, showOptions: !showOptions }, () => {
+          this.forceUpdate()
+        })
+      })
+      .catch(() => {
+        alert('Invalid request!')
+      })
+  }
+
+  updateTree(node) {
+    node.data.isExpanded = !node.data.isExpanded
+    this.forceUpdate()
   }
 
   render() {
@@ -203,9 +243,18 @@ export default class extends React.Component {
     const fontSize = 9
 
     const circleRadius = 24
-    const circleDiameter = circleRadius * 2
+    const avatarSize = circleRadius * 2
 
-    const { layout, orientation, linkType, stepPercent } = this.state
+    const {
+      treeData,
+      layout,
+      orientation,
+      linkType,
+      stepPercent,
+      showOptions,
+      nodeImageUrl,
+      nodeName
+    } = this.state
 
     const innerWidth = width - margin.left - margin.right
     const innerHeight = height - margin.top - margin.bottom
@@ -320,7 +369,6 @@ export default class extends React.Component {
             disabled={linkType !== 'step' || layout === 'polar'}
           />
         </div>
-
         <svg width={width} height={height}>
           {/* LinearGradient - lgFemale - Pink gradient */}
           <LinearGradient id="lgFemale" from="#fd9b93" to="#fe6e9e" />
@@ -331,7 +379,9 @@ export default class extends React.Component {
           <rect width={width} height={height} rx={0} fill="#272b4d" />
           <Group top={margin.top} left={margin.left}>
             <Tree
-              root={hierarchy(data, d => (d.isExpanded ? null : d.children))}
+              root={hierarchy(treeData, d =>
+                d.isExpanded ? null : d.children
+              )}
               size={[sizeWidth, sizeHeight]}
               separation={(a, b) =>
                 (a.parent === b.parent ? 0.5 : 0.75) / a.depth
@@ -359,9 +409,6 @@ export default class extends React.Component {
                         strokeWidth="1"
                         fill="none"
                         key={i}
-                        onClick={data => event => {
-                          console.log(data)
-                        }}
                       />
                     )
                   })}
@@ -386,9 +433,6 @@ export default class extends React.Component {
                         strokeWidth="1"
                         fill="none"
                         key={i}
-                        onClick={data => event => {
-                          console.log(data)
-                        }}
                       />
                     ) : null
                   })}
@@ -429,9 +473,7 @@ export default class extends React.Component {
                         key={key}
                         className="node-group"
                         onClick={() => {
-                          node.data.isExpanded = !node.data.isExpanded
-                          console.log(node)
-                          this.forceUpdate()
+                          return this.showNodeOptions(node)
                         }}
                       >
                         {hasImage === true && imageUrl !== '' && (
@@ -441,8 +483,8 @@ export default class extends React.Component {
                               x={circleRadius}
                               y={circleRadius}
                               patternUnits="userSpaceOnUse"
-                              height={circleDiameter}
-                              width={circleDiameter}
+                              height={avatarSize}
+                              width={avatarSize}
                             >
                               <image x="0" y="0" xlinkHref={imageUrl} />
                             </pattern>
@@ -501,6 +543,53 @@ export default class extends React.Component {
             </Tree>
           </Group>
         </svg>
+        {showOptions === true && (
+          <React.Fragment>
+            <div id="test" className="modal is-active">
+              <div
+                className="modal-background"
+                onClick={this.showNodeOptions}
+              />
+              <div className="modal-card">
+                <header className="modal-card-head">
+                  <p className="modal-card-title">What next?</p>
+                  <button
+                    className="delete"
+                    aria-label="close"
+                    onClick={this.showNodeOptions}
+                    title="Close"
+                  />
+                </header>
+                <section className="modal-card-body">
+                  <div className="content">
+                    Do you want to see the family tree of the member{' '}
+                    <img
+                      src={nodeImageUrl}
+                      width={avatarSize}
+                      height={avatarSize}
+                      alt={nodeName}
+                    />{' '}
+                    <b>{nodeName}</b>?
+                  </div>
+                </section>
+                <footer className="modal-card-foot">
+                  <button
+                    className="button is-success is-pulled-right"
+                    onClick={this.fetchNodeTree}
+                  >
+                    Show Tree
+                  </button>
+                  <button
+                    className="button is-pulled-right"
+                    onClick={this.showNodeOptions}
+                  >
+                    Cancel
+                  </button>
+                </footer>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     )
   }
