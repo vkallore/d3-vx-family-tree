@@ -37,7 +37,7 @@ const data = {
       noParent: true,
       children: [
         {
-          name: 'Parvathi Amma',
+          name: 'P A',
           id: 3,
           gender: 'Female',
           isSource: true,
@@ -51,12 +51,12 @@ const data = {
           noParent: true,
           children: [
             {
-              name: 'Balagopalan K',
+              name: 'B K',
               id: 100,
               hasParnter: true
             },
             {
-              name: 'Devi MM',
+              name: 'D MM',
               id: 102,
               partnerId: 100,
               gender: 'Female',
@@ -471,9 +471,11 @@ export default class extends React.Component {
                         top={top}
                         left={left}
                         key={key}
-                        className="node-group"
+                        className={isSource !== true ? 'node-group' : ''}
                         onClick={() => {
-                          return this.showNodeOptions(node)
+                          return isSource !== true
+                            ? this.showNodeOptions(node)
+                            : void 0
                         }}
                       >
                         {hasImage === true && imageUrl !== '' && (
