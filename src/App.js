@@ -23,9 +23,10 @@ import {
 const data = {
   name: 'J A',
   gender: 'Female',
+  imageUrl: '/avatar/gravator.jpg',
   children: [
     {
-      name: 'P A',
+      name: 'Parvathi Amma',
       id: 1,
       gender: 'Female',
       isSource: true,
@@ -40,12 +41,12 @@ const data = {
       noParent: true,
       children: [
         {
-          name: 'B K',
+          name: 'Balagopalan K',
           id: 100,
           hasParnter: true
         },
         {
-          name: 'D MM',
+          name: 'Devi MM',
           id: 102,
           partnerId: 100,
           gender: 'Female',
@@ -66,7 +67,8 @@ const data = {
           name: 'V PK',
           id: 200,
           gender: 'Female',
-          hasParnter: true
+          hasParnter: true,
+          imageUrl: '/avatar/v-pk.jpeg'
         },
         {
           name: 'EK T N',
@@ -94,7 +96,8 @@ const data = {
         {
           name: 'V K',
           id: 300,
-          hasParnter: true
+          hasParnter: true,
+          imageUrl: '/avatar/v-k.jpeg'
         },
         {
           name: 'M PG',
@@ -105,7 +108,8 @@ const data = {
           noParent: true,
           children: [
             {
-              name: 'V K'
+              name: 'V K',
+              imageUrl: '/avatar/v-k-1.jpeg'
             },
             {
               name: 'V KV'
@@ -143,6 +147,7 @@ const data = {
       gender: 'Male',
       isPartner: true,
       noParent: true,
+      imageUrl: '/avatar/dummy.png',
       children: [
         {
           name: 'Sam'
@@ -189,6 +194,9 @@ export default class extends React.Component {
     let partners = []
     const nameLineHeight = 1.2
     const fontSize = 9
+
+    const circleRadius = 24
+    const circleDiameter = circleRadius * 2
 
     const { layout, orientation, linkType, stepPercent } = this.state
 
@@ -374,30 +382,30 @@ export default class extends React.Component {
                     const gender = node.data.gender
                     const isFemale = gender === 'Female' ? true : false
                     const name = node.data.name || ''
-                    const nameLength = name.length
-                    const nameWords = name.split(/\s+/)
-                    const nameWordsLength = nameWords.length
-                    let nameWordMaxLength = 0
-                    nameWords.map(word => {
-                      nameWordMaxLength =
-                        word.length > nameWordMaxLength
-                          ? word.length
-                          : nameWordMaxLength
-                      return []
-                    })
-                    const width =
-                      nameWordMaxLength <= 5 ? 40 : nameWordMaxLength * 7
-                    const height = nameWordsLength * 14
+                    const nameLength = name.length * 4
+                    // const nameWords = name.split(/\s+/)
+                    // const nameWordsLength = nameWords.length
+                    // let nameWordMaxLength = 0
+                    // nameWords.map(word => {
+                    //   nameWordMaxLength =
+                    //     word.length > nameWordMaxLength
+                    //       ? word.length
+                    //       : nameWordMaxLength
+                    //   return []
+                    // })
+                    // const width =
+                    //   nameWordMaxLength <= 5 ? 40 : nameWordMaxLength * 7
+                    // const height = nameWordsLength * 14
 
                     /* Name Positioning */
-                    const nameMidDyPosition =
-                      (fontSize / 20) * (nameWordsLength === 2 ? -1 : 1)
-                    let nameWordDyPosition =
-                      nameMidDyPosition -
-                      Math.ceil(nameWordsLength / 2) * nameLineHeight
+                    // const nameMidDyPosition =
+                    //   (fontSize / 20) * (nameWordsLength === 2 ? -1 : 1)
+                    // let nameWordDyPosition =
+                    //   nameMidDyPosition -
+                    //   Math.ceil(nameWordsLength / 2) * nameLineHeight
                     /* EO Name Positioning */
 
-                    const circleRadius = nameLength <= 5 ? 12 : nameLength * 2
+                    // const circleRadius = nameLength <= 5 ? 12 : nameLength * 2
 
                     let top
                     let left
@@ -414,23 +422,88 @@ export default class extends React.Component {
                         left = node.y
                       }
                     }
-
+                    const isSource = node.data.isSource
+                    const imageId = 'image_' + key
+                    const imageUrl = node.data.imageUrl
+                    const hasImage = imageUrl !== undefined && imageUrl !== ''
                     return (
-                      <Group top={top} left={left} key={key}>
-                        {node.data.isSource === true && (
-                          <circle
-                            r={circleRadius}
-                            fill={
-                              isFemale ? "url('#lgFemale')" : "url('#lgMale')"
-                            }
-                            onClick={() => {
-                              node.data.isExpanded = !node.data.isExpanded
-                              console.log(node)
-                              this.forceUpdate()
-                            }}
-                          />
+                      <Group
+                        top={top}
+                        left={left}
+                        key={key}
+                        className="node-group"
+                        onClick={() => {
+                          node.data.isExpanded = !node.data.isExpanded
+                          console.log(node)
+                          this.forceUpdate()
+                        }}
+                      >
+                        {hasImage === true && imageUrl !== '' && (
+                          <defs>
+                            <pattern
+                              id={imageId}
+                              x={circleRadius}
+                              y={circleRadius}
+                              patternUnits="userSpaceOnUse"
+                              height={circleDiameter}
+                              width={circleDiameter}
+                            >
+                              <image x="0" y="0" xlinkHref={imageUrl} />
+                            </pattern>
+                          </defs>
                         )}
-                        {node.data.isSource !== true && (
+                        <circle
+                          r={circleRadius}
+                          fill={
+                            hasImage
+                              ? "url('#" + imageId + "')"
+                              : isSource
+                              ? isFemale
+                                ? "url('#lgFemale')"
+                                : "url('#lgMale')"
+                              : node.data.isPartner !== true
+                              ? '#272b4d'
+                              : "url('#lgSpouse')"
+                          }
+                          // onClick={() => {
+                          //   node.data.isExpanded = !node.data.isExpanded
+                          //   console.log(node)
+                          //   this.forceUpdate()
+                          // }}
+                          className={
+                            !isSource
+                              ? 'node ' + (isFemale ? 'female' : 'male')
+                              : ''
+                          }
+                          strokeWidth={1}
+                          strokeDasharray={
+                            !node.data.children && !node.data.hasParnter
+                              ? '2,2'
+                              : '0'
+                          }
+                          strokeOpacity={1}
+                        />
+                        )}
+                        <rect
+                          y={-nameLineHeight + fontSize / 2}
+                          x={-nameLength}
+                          height={fontSize * 2}
+                          width={nameLength * 2}
+                          className="node-text-bg"
+                          rx="5"
+                        />
+                        <text
+                          dy={circleRadius - fontSize}
+                          fontSize={fontSize}
+                          fontFamily="Arial"
+                          textAnchor={'middle'}
+                          style={{ pointerEvents: 'none' }}
+                          className="node"
+                          // strokeOpacity={0.5}
+                        >
+                          {name}
+                        </text>
+                        {/* {node.data.isSource !== true && (
                           <rect
                             height={height}
                             width={width}
@@ -463,48 +536,9 @@ export default class extends React.Component {
                               this.showOption(node)
                             }}
                           />
-                        )}
-                        {/* {node.data.spouse !== undefined && (
-                          <rect
-                            height={height}
-                            width={width}
-                            y={
-                              orientation !== 'vertical'
-                                ? -height * 2
-                                : -width / 2
-                            }
-                            x={
-                              orientation !== 'vertical'
-                                ? -width / 2
-                                : -height * 2
-                            }
-                            fill={'#fff000'}
-                            stroke={isFemale ? '#fe6e9e' : '#26deb0'}
-                            strokeWidth={1}
-                            strokeDasharray={!node.data.children ? '2,2' : '0'}
-                            strokeOpacity={!node.data.children ? 0.6 : 1}
-                            rx={!node.data.children ? 10 : 0}
-                            className="node"
-                            onClick={() => {
-                              this.showOption(node)
-                            }}
-                          />
-                        )} */}
-                        {/* {node.data.spouse !== undefined && (
-                          <text
-                            key={node.data.spouse}
-                            dy={'0.33em'}
-                            fontSize={fontSize}
-                            fontFamily="Arial"
-                            textAnchor={'middle'}
-                            style={{ pointerEvents: 'none' }}
-                            fill={'#26deb0'}
-                          >
-                            {node.data.spouse}
-                          </text>
                         )} */}
                         {/* Loop through words in name to make text */}
-                        {nameWords.map((word, key) => {
+                        {/* {nameWords.map((word, key) => {
                           nameWordDyPosition += nameLineHeight
                           return (
                             <text
@@ -527,7 +561,7 @@ export default class extends React.Component {
                               {word}
                             </text>
                           )
-                        })}
+                        })} */}
                       </Group>
                     )
                   })}
