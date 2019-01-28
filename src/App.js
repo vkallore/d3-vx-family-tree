@@ -21,134 +21,147 @@ import {
 } from '@vx/shape'
 
 const data = {
-  name: 'J A',
-  gender: 'Female',
+  name: '',
   children: [
     {
-      name: 'P A',
+      name: 'J A',
       id: 1,
       gender: 'Female',
-      isSource: true,
-      hasParnter: true
+      hasParnter: true,
+      imageUrl: '/avatar/gravator.jpg'
     },
     {
-      name: 'MK N A',
+      name: 'Mr. J A',
       id: 2,
       partnerId: 1,
-      gender: 'Male',
-      isPartner: true,
       noParent: true,
       children: [
         {
-          name: 'B K',
-          id: 100,
+          name: 'P A',
+          id: 3,
+          gender: 'Female',
+          isSource: true,
           hasParnter: true
         },
         {
-          name: 'D MM',
-          id: 102,
-          partnerId: 100,
-          gender: 'Female',
-          isPartner: true,
-          noParent: true,
-          children: [{ name: 'D MM', gender: 'Female' }]
-        },
-        {
-          name: 'MM D',
-          id: 102,
-          partnerId: 100,
-          gender: 'Female',
-          isPartner: true,
-          noParent: true,
-          children: [{ name: 'B MM' }]
-        },
-        {
-          name: 'V PK',
-          id: 200,
-          gender: 'Female',
-          hasParnter: true
-        },
-        {
-          name: 'EK T N',
-          id: 201,
-          partnerId: 200,
-          isPartner: true,
+          name: 'MK N A',
+          id: 5,
+          partnerId: 3,
+          gender: 'Male',
           noParent: true,
           children: [
             {
-              name: 'S PK',
-              gender: 'Female'
+              name: 'B K',
+              id: 100,
+              hasParnter: true
             },
             {
-              name: 'Sku PK'
+              name: 'D MM',
+              id: 102,
+              partnerId: 100,
+              gender: 'Female',
+              noParent: true,
+              children: [{ name: 'D MM', gender: 'Female' }]
             },
             {
-              name: 'Sj PK'
+              name: 'MM D',
+              id: 102,
+              partnerId: 100,
+              gender: 'Female',
+              noParent: true,
+              children: [{ name: 'B MM' }]
             },
             {
-              name: 'Ska PK'
+              name: 'V PK',
+              id: 200,
+              gender: 'Female',
+              hasParnter: true,
+              imageUrl: '/avatar/v-pk.jpeg'
+            },
+            {
+              name: 'EK T N',
+              id: 201,
+              partnerId: 200,
+              noParent: true,
+              children: [
+                {
+                  name: 'S PK',
+                  gender: 'Female'
+                },
+                {
+                  name: 'Sku PK'
+                },
+                {
+                  name: 'Sj PK'
+                },
+                {
+                  name: 'Ska PK'
+                }
+              ]
+            },
+
+            {
+              name: 'V K',
+              id: 300,
+              hasParnter: true,
+              imageUrl: '/avatar/v-k.jpeg'
+            },
+            {
+              name: 'M PG',
+              gender: 'Female',
+              id: 301,
+              partnerId: 300,
+              noParent: true,
+              children: [
+                {
+                  name: 'V K',
+                  id: 3001,
+                  imageUrl: '/avatar/v-k-1.jpeg'
+                },
+                {
+                  name: 'V KV'
+                }
+              ]
+            },
+            {
+              name: 'R PK',
+              id: 400,
+              hasParnter: true
+            },
+            {
+              name: 'S VV',
+              gender: 'Female',
+              id: 401,
+              partnerId: 400,
+              noParent: true,
+              children: [
+                {
+                  name: 'A R',
+                  gender: 'Female'
+                },
+                {
+                  name: 'C K'
+                }
+              ]
             }
           ]
         },
 
         {
-          name: 'V K',
-          id: 300,
-          hasParnter: true
-        },
-        {
-          name: 'M PG',
-          gender: 'Female',
-          id: 301,
-          partnerId: 300,
-          isPartner: true,
+          name: 'Dummy',
+          id: 4,
+          partnerId: 3,
+          gender: 'Male',
           noParent: true,
+          imageUrl: '/avatar/dummy.png',
           children: [
             {
-              name: 'V K'
+              name: 'Sam'
             },
             {
-              name: 'V KV'
+              name: 'Thomas'
             }
           ]
-        },
-        {
-          name: 'R PK',
-          id: 400,
-          hasParnter: true
-        },
-        {
-          name: 'S VV',
-          gender: 'Female',
-          id: 401,
-          partnerId: 400,
-          isPartner: true,
-          noParent: true,
-          children: [
-            {
-              name: 'A R',
-              gender: 'Female'
-            },
-            {
-              name: 'C K'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Dummy',
-      id: 3,
-      partnerId: 1,
-      gender: 'Male',
-      isPartner: true,
-      noParent: true,
-      children: [
-        {
-          name: 'Sam'
-        },
-        {
-          name: 'Thomas'
         }
       ]
     }
@@ -160,19 +173,58 @@ export default class extends React.Component {
     layout: 'cartesian',
     orientation: 'horizontal',
     linkType: 'diagonal',
-    stepPercent: 1
+    stepPercent: 1,
+    showOptions: false,
+    nodeId: null,
+    nodeName: '',
+    nodeImageUrl: '',
+    treeData: {}
   }
 
   constructor(props) {
     super(props)
 
-    this.showOption = this.showOption.bind(this)
+    this.showNodeOptions = this.showNodeOptions.bind(this)
+    this.updateTree = this.updateTree.bind(this)
+    this.fetchNodeTree = this.fetchNodeTree.bind(this)
   }
 
-  showOption(node) {
-    // node.data.isExpanded = !node.data.isExpanded
-    // console.log(node)
-    // this.forceUpdate()
+  componentDidMount() {
+    this.setState({ treeData: data })
+  }
+
+  showNodeOptions(node) {
+    const { showOptions } = this.state
+    const imageUrl = node.data && node.data.imageUrl ? node.data.imageUrl : ''
+    const name = node.data && node.data.name ? node.data.name : ''
+    const nodeId = node.data && node.data.id ? node.data.id : ''
+    this.setState({
+      showOptions: !showOptions,
+      nodeImageUrl: imageUrl,
+      nodeName: name,
+      nodeId: nodeId
+    })
+  }
+
+  fetchNodeTree() {
+    const { nodeId, showOptions } = this.state
+    fetch(`/json/${nodeId}.json`)
+      .then(res => {
+        return res.status === 200 ? res.json() : {}
+      })
+      .then(treeData => {
+        this.setState({ treeData: treeData, showOptions: !showOptions }, () => {
+          this.forceUpdate()
+        })
+      })
+      .catch(() => {
+        alert('Invalid request!')
+      })
+  }
+
+  updateTree(node) {
+    node.data.isExpanded = !node.data.isExpanded
+    this.forceUpdate()
   }
 
   render() {
@@ -190,7 +242,19 @@ export default class extends React.Component {
     const nameLineHeight = 1.2
     const fontSize = 9
 
-    const { layout, orientation, linkType, stepPercent } = this.state
+    const circleRadius = 24
+    const avatarSize = circleRadius * 2
+
+    const {
+      treeData,
+      layout,
+      orientation,
+      linkType,
+      stepPercent,
+      showOptions,
+      nodeImageUrl,
+      nodeName
+    } = this.state
 
     const innerWidth = width - margin.left - margin.right
     const innerHeight = height - margin.top - margin.bottom
@@ -211,9 +275,13 @@ export default class extends React.Component {
       if (orientation === 'vertical') {
         sizeWidth = innerWidth
         sizeHeight = innerHeight
+        /* As root note is hidden, adjust tree's Y positioning */
+        origin.y -= sizeHeight / 10
       } else {
         sizeWidth = innerHeight
         sizeHeight = innerWidth
+        /* As root note is hidden, adjust tree's X positioning */
+        origin.x -= sizeHeight / 10
       }
     }
 
@@ -301,7 +369,6 @@ export default class extends React.Component {
             disabled={linkType !== 'step' || layout === 'polar'}
           />
         </div>
-
         <svg width={width} height={height}>
           {/* LinearGradient - lgFemale - Pink gradient */}
           <LinearGradient id="lgFemale" from="#fd9b93" to="#fe6e9e" />
@@ -312,7 +379,9 @@ export default class extends React.Component {
           <rect width={width} height={height} rx={0} fill="#272b4d" />
           <Group top={margin.top} left={margin.left}>
             <Tree
-              root={hierarchy(data, d => (d.isExpanded ? null : d.children))}
+              root={hierarchy(treeData, d =>
+                d.isExpanded ? null : d.children
+              )}
               size={[sizeWidth, sizeHeight]}
               separation={(a, b) =>
                 (a.parent === b.parent ? 0.5 : 0.75) / a.depth
@@ -323,6 +392,10 @@ export default class extends React.Component {
                   {data.links().map((link, i) => {
                     if (link.target.data.hasParnter) {
                       partners.push(link.target)
+                    }
+                    /* Do not show the link from root empty object */
+                    if (link.source.depth === 0) {
+                      return null
                     }
                     if (link.target.data.noParent === true) {
                       return null
@@ -336,15 +409,12 @@ export default class extends React.Component {
                         strokeWidth="1"
                         fill="none"
                         key={i}
-                        onClick={data => event => {
-                          console.log(data)
-                        }}
                       />
                     )
                   })}
                   {/* Draw Partners Line */}
                   {data.links().map((link, i) => {
-                    if (link.target.data.isPartner !== true) {
+                    if (typeof link.target.data.partnerId !== 'number') {
                       return null
                     }
                     const nodePartnerId = link.target.data.partnerId
@@ -363,41 +433,19 @@ export default class extends React.Component {
                         strokeWidth="1"
                         fill="none"
                         key={i}
-                        onClick={data => event => {
-                          console.log(data)
-                        }}
                       />
                     ) : null
                   })}
 
                   {data.descendants().map((node, key) => {
+                    /* Do not show the empty root object */
+                    if (node.depth === 0) {
+                      return null
+                    }
                     const gender = node.data.gender
                     const isFemale = gender === 'Female' ? true : false
                     const name = node.data.name || ''
-                    const nameLength = name.length
-                    const nameWords = name.split(/\s+/)
-                    const nameWordsLength = nameWords.length
-                    let nameWordMaxLength = 0
-                    nameWords.map(word => {
-                      nameWordMaxLength =
-                        word.length > nameWordMaxLength
-                          ? word.length
-                          : nameWordMaxLength
-                      return []
-                    })
-                    const width =
-                      nameWordMaxLength <= 5 ? 40 : nameWordMaxLength * 7
-                    const height = nameWordsLength * 14
-
-                    /* Name Positioning */
-                    const nameMidDyPosition =
-                      (fontSize / 20) * (nameWordsLength === 2 ? -1 : 1)
-                    let nameWordDyPosition =
-                      nameMidDyPosition -
-                      Math.ceil(nameWordsLength / 2) * nameLineHeight
-                    /* EO Name Positioning */
-
-                    const circleRadius = nameLength <= 5 ? 12 : nameLength * 2
+                    const nameLength = name.length * 4
 
                     let top
                     let left
@@ -414,120 +462,81 @@ export default class extends React.Component {
                         left = node.y
                       }
                     }
-
+                    const isSource = node.data.isSource
+                    const imageId = 'image_' + key
+                    const imageUrl = node.data.imageUrl
+                    const hasImage = imageUrl !== undefined && imageUrl !== ''
                     return (
-                      <Group top={top} left={left} key={key}>
-                        {node.data.isSource === true && (
-                          <circle
-                            r={circleRadius}
-                            fill={
-                              isFemale ? "url('#lgFemale')" : "url('#lgMale')"
-                            }
-                            onClick={() => {
-                              node.data.isExpanded = !node.data.isExpanded
-                              console.log(node)
-                              this.forceUpdate()
-                            }}
-                          />
-                        )}
-                        {node.data.isSource !== true && (
-                          <rect
-                            height={height}
-                            width={width}
-                            y={-height / 2}
-                            x={-width / 2}
-                            fill={
-                              node.data.isPartner !== true
-                                ? '#272b4d'
-                                : "url('#lgSpouse')"
-                            }
-                            stroke={isFemale ? '#fe6e9e' : '#26deb0'}
-                            strokeWidth={1}
-                            strokeDasharray={
-                              !node.data.children && !node.data.hasParnter
-                                ? '2,2'
-                                : '0'
-                            }
-                            strokeOpacity={
-                              !node.data.children && !node.data.hasParnter
-                                ? 0.6
-                                : 1
-                            }
-                            rx={
-                              !node.data.children && !node.data.hasParnter
-                                ? 10
-                                : 0
-                            }
-                            className="node"
-                            onClick={() => {
-                              this.showOption(node)
-                            }}
-                          />
-                        )}
-                        {/* {node.data.spouse !== undefined && (
-                          <rect
-                            height={height}
-                            width={width}
-                            y={
-                              orientation !== 'vertical'
-                                ? -height * 2
-                                : -width / 2
-                            }
-                            x={
-                              orientation !== 'vertical'
-                                ? -width / 2
-                                : -height * 2
-                            }
-                            fill={'#fff000'}
-                            stroke={isFemale ? '#fe6e9e' : '#26deb0'}
-                            strokeWidth={1}
-                            strokeDasharray={!node.data.children ? '2,2' : '0'}
-                            strokeOpacity={!node.data.children ? 0.6 : 1}
-                            rx={!node.data.children ? 10 : 0}
-                            className="node"
-                            onClick={() => {
-                              this.showOption(node)
-                            }}
-                          />
-                        )} */}
-                        {/* {node.data.spouse !== undefined && (
-                          <text
-                            key={node.data.spouse}
-                            dy={'0.33em'}
-                            fontSize={fontSize}
-                            fontFamily="Arial"
-                            textAnchor={'middle'}
-                            style={{ pointerEvents: 'none' }}
-                            fill={'#26deb0'}
-                          >
-                            {node.data.spouse}
-                          </text>
-                        )} */}
-                        {/* Loop through words in name to make text */}
-                        {nameWords.map((word, key) => {
-                          nameWordDyPosition += nameLineHeight
-                          return (
-                            <text
-                              key={word + '_' + key}
-                              dy={nameWordDyPosition + 'em'}
-                              fontSize={fontSize}
-                              fontFamily="Arial"
-                              textAnchor={'middle'}
-                              style={{ pointerEvents: 'none' }}
-                              fill={
-                                node.data.isSource === true
-                                  ? '#71248e'
-                                  : node.data.isPartner !== true
-                                  ? node.children
-                                    ? 'white'
-                                    : '#26deb0'
-                                  : '#000'
-                              }
+                      <Group
+                        top={top}
+                        left={left}
+                        key={key}
+                        className={isSource !== true ? 'node-group' : ''}
+                        onClick={() => {
+                          return isSource !== true
+                            ? this.showNodeOptions(node)
+                            : void 0
+                        }}
+                      >
+                        {hasImage === true && imageUrl !== '' && (
+                          <defs>
+                            <pattern
+                              id={imageId}
+                              x={circleRadius}
+                              y={circleRadius}
+                              patternUnits="userSpaceOnUse"
+                              height={avatarSize}
+                              width={avatarSize}
                             >
-                              {word}
-                            </text>
-                          )
-                        })}
+                              <image x="0" y="0" xlinkHref={imageUrl} />
+                            </pattern>
+                          </defs>
+                        )}
+                        <circle
+                          r={circleRadius}
+                          fill={
+                            hasImage
+                              ? "url('#" + imageId + "')"
+                              : isSource
+                              ? isFemale
+                                ? "url('#lgFemale')"
+                                : "url('#lgMale')"
+                              : node.data.isPartner !== true
+                              ? '#272b4d'
+                              : "url('#lgSpouse')"
+                          }
+                          className={
+                            !isSource
+                              ? 'node ' + (isFemale ? 'female' : 'male')
+                              : ''
+                          }
+                          strokeWidth={1}
+                          strokeDasharray={
+                            !node.data.children && !node.data.hasParnter
+                              ? '2,2'
+                              : '0'
+                          }
+                          strokeOpacity={1}
+                        />
+                        )}
+                        <rect
+                          y={-nameLineHeight + fontSize / 2}
+                          x={-nameLength}
+                          height={fontSize * 2}
+                          width={nameLength * 2}
+                          className="node-text-bg"
+                          rx="5"
+                        />
+                        <text
+                          dy={circleRadius - fontSize}
+                          fontSize={fontSize}
+                          fontFamily="Arial"
+                          textAnchor={'middle'}
+                          style={{ pointerEvents: 'none' }}
+                          className="node"
+                        >
+                          {name}
+                        </text>
                       </Group>
                     )
                   })}
@@ -536,6 +545,53 @@ export default class extends React.Component {
             </Tree>
           </Group>
         </svg>
+        {showOptions === true && (
+          <React.Fragment>
+            <div id="test" className="modal is-active">
+              <div
+                className="modal-background"
+                onClick={this.showNodeOptions}
+              />
+              <div className="modal-card">
+                <header className="modal-card-head">
+                  <p className="modal-card-title">What next?</p>
+                  <button
+                    className="delete"
+                    aria-label="close"
+                    onClick={this.showNodeOptions}
+                    title="Close"
+                  />
+                </header>
+                <section className="modal-card-body">
+                  <div className="content">
+                    Do you want to see the family tree of the member{' '}
+                    <img
+                      src={nodeImageUrl}
+                      width={avatarSize}
+                      height={avatarSize}
+                      alt={nodeName}
+                    />{' '}
+                    <b>{nodeName}</b>?
+                  </div>
+                </section>
+                <footer className="modal-card-foot">
+                  <button
+                    className="button is-success is-pulled-right"
+                    onClick={this.fetchNodeTree}
+                  >
+                    Show Tree
+                  </button>
+                  <button
+                    className="button is-pulled-right"
+                    onClick={this.showNodeOptions}
+                  >
+                    Cancel
+                  </button>
+                </footer>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     )
   }
